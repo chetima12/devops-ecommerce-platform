@@ -24,6 +24,13 @@ router.get('/', (req, res) => {
   res.status(200).json(products);
 });
 
+// Get total number of products
+router.get('/count', (req, res) => {
+  res.status(200).json({
+    count: products.length
+  });
+});
+
 router.get('/:id', (req, res) => {
   const product = products.find(
     (item) => item.id === Number(req.params.id)
