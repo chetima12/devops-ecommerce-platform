@@ -15,3 +15,18 @@ describe('Health Check API', () => {
   });
 
 });
+
+describe('Products API', () => {
+
+  test('GET /api/products/count should return product count', async () => {
+
+    const response = await request(app)
+      .get('/api/products/count');
+
+    expect(response.statusCode).toBe(200);
+
+    expect(response.body.count).toBe(3);
+
+  });
+
+});
