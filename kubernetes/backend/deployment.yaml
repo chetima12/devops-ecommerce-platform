@@ -19,10 +19,27 @@ spec:
         app: ecommerce-backend
 
     spec:
+
+      initContainers:
+        - name: init-database
+          image: ecommerce-backend:2.0
+          imagePullPolicy: IfNotPresent
+
+          command:
+            - npm
+            - run
+            - init-db
+
+          envFrom:
+            - configMapRef:
+                name: backend-config
+
+            - secretRef:
+                name: backend-secret
+
       containers:
         - name: backend
-          image: ecommerce-backend:1.1
-
+          image: ecommerce-backend:2.0
           imagePullPolicy: IfNotPresent
 
           ports:

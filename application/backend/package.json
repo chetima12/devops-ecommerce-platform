@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --coverage",
     "init-db": "node src/scripts/initDatabase.js"
   },
   "keywords": [],
