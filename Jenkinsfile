@@ -195,7 +195,11 @@ pipeline {
 
     post {
         always {
-            sh 'docker rm -f ecommerce-postgres-test || true'
+            sh '''
+                 docker image rm \
+                    $APP_NAME:$IMAGE_TAG \
+                    2>/dev/null || true
+            '''
         }
 
         success {
