@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-backend
+  namespace: ecommerce
+  labels:
+    app: ecommerce-backend
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: ecommerce-backend
+
+  template:
+    metadata:
+      labels:
+        app: ecommerce-backend
+
+    spec:
+
+      initContainers:
+        - name: init-database
+          image: ecommerce-backend:2.0
+          imagePullPolicy: IfNotPresent
+
+          command:
+            - npm
+            - run
+            - init-db
+
+          envFrom:
+            - configMapRef:
+                name: backend-config
+
+            - secretRef:
+                name: backend-secret
+
+      containers:
+        - name: backend
+          image: ecommerce-backend:2.0
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 3000
+
+          envFrom:
+            - configMapRef:
+                name: backend-config
+
+            - secretRef:
+                name: backend-secret
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+
+            initialDelaySeconds: 15
+            periodSeconds: 20

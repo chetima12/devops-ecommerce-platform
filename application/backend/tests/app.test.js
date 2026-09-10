@@ -1,5 +1,10 @@
 const request = require('supertest');
 const app = require('../src/app');
+const pool = require('../src/config/database');
+
+afterAll(async () => {
+  await pool.end();
+});
 
 describe('Health Check API', () => {
 
